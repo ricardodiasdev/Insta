@@ -7,7 +7,6 @@ import {
   FlatList,
 } from "react-native";
 
-
 import Lista from "./src/components/Lista";
 
 import feed from "./src/data/Feed";
@@ -29,7 +28,8 @@ export default function App() {
       <FlatList
         showsHorizontalScrollIndicator={false}
         data={feed}
-        renderItem={( {item} ) => <Lista data={item}/>}
+        renderItem={(item ) => <Lista data={item} />}
+        keyExtractor={(item) => item.id}
       />
     </View>
   );
