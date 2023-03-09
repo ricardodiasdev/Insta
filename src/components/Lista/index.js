@@ -1,36 +1,46 @@
 import React, { useState } from "react";
 
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  findNodeHandle,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import iconeLike from "../../img/like.png";
+import iconeLikeada from  "../../img/likeada.png";
 import send from "../../img/send.png";
 
 const Lista = ({ data }) => {
+
+  let { nome, imgperfil, imgPublicacao, descricao, likeada, likers } =
+    data.item;
+
+  const [countLikers, setCountLikers] = useState(likers);
+  const [isLikeada, setIsLakeada] = useState(likeada);
+
+  const handleLike = () => {
+    if (isLikeada === true) {
+      setIsLakeada(false);
+      setCountLikers(countLikers - 1);
+      console.log(countLikers, isLikeada);
+    } else {
+      setIsLakeada(true);
+      setCountLikers(countLikers + 1);
+      console.log(countLikers, isLikeada);
+    }
+  };
+
   return (
     <View style={styles.areaFeed}>
       <View style={styles.viewPerfil}>
-        <Image
-          style={styles.fotoPerfil}
-          source={{ uri: data.item.imgperfil }}
-        />
-        <Text style={styles.nomeUsuario}>{data.item.nome}</Text>
+        <Image style={styles.fotoPerfil} source={{ uri: imgperfil }} />
+        <Text style={styles.nomeUsuario}>{nome}</Text>
       </View>
       <Image
         style={styles.fotoPublicacao}
-        source={{ uri: data.item.imgPublicacao }}
+        source={{ uri: imgPublicacao }}
         resizeMode="cover"
       />
       <View style={styles.areaBtn}>
         <View>
-          <TouchableOpacity>
-            <Image source={iconeLike} style={styles.icone} />
+          <TouchableOpacity onPress={handleLike}>
+            <Image source={!isLikeada ? iconeLike : iconeLikeada} style={styles.icone} />
           </TouchableOpacity>
         </View>
         <View>
@@ -39,9 +49,16 @@ const Lista = ({ data }) => {
           </TouchableOpacity>
         </View>
       </View>
+      {countLikers <= 0 ? (
+        ""
+      ) : (
+        <Text style={styles.likes}>
+          {countLikers} {countLikers > 1 ? "curtidas" : "curtida"}
+        </Text>
+      )}
       <View style={styles.viewRodape}>
-        <Text style={styles.nomeRodape}>{data.item.nome}</Text>
-        <Text style={styles.descricaoRodape}>{data.item.descricao}</Text>
+        <Text style={styles.nomeRodape}>{nome}</Text>
+        <Text style={styles.descricaoRodape}>{descricao}</Text>
       </View>
     </View>
   );
@@ -95,6 +112,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000",
     paddingLeft: 5,
+  },
+  likes: {
+    fontWeight: "bold",
+    marginLeft: 6,
   },
 });
 
